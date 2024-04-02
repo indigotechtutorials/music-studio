@@ -47,7 +47,7 @@ export default class extends Controller {
     if (this.element.contains(e.target)) {
       e.preventDefault()
       this.menuTarget.classList.remove("hidden")
-      let newX = event.clientX - (this.menuTarget.offsetWidth / 2) - 500;
+      let newX = event.clientX - (this.menuTarget.offsetWidth / 2);
       let newY = event.clientY - (this.menuTarget.offsetHeight / 2) + 50;
 
       this.menuTarget.style.top = `${newY}px`

@@ -1,15 +1,11 @@
 <div class="w-full h-10 overflow-hidden flex gap-[2px]" data-controller="drum-pattern--track" data-drum-pattern-target="track" 
-    data-drum-pattern--track-sound-value="<%= sound.is_a?(String) ? sound : url_for(sound) %>" 
+    data-drum-pattern--track-sound-value="<%= url_for(sound) %>" 
     data-action="drum-pattern:note-played->drum-pattern--track#notePlayed 
         drum-pattern:pause->drum-pattern--track#pause mousedown@window->drum-pattern--track#handleClick
         drum-pattern--track:copy->drum-pattern#copySteps">
   <div class="flex flex-col w-10 flex-shrink-0">
     <span class="text-xs text-gray-100 overflow-hidden w-full" data-drum-pattern--track-target="filename"> <%= sound.is_a?(String) ? sound.capitalize : sound.blob.filename.base %> </span>
-    <% if sound.is_a?(String) %>
-      <%= image_tag "#{sound}.png", class: "w-full h-6 invert" %>
-    <% else %>
-      <%= image_tag "sample.png", class: "w-full h-6 invert" %>
-    <% end %>
+    <%= image_tag "sample.png", class: "w-full h-6 invert" %>
     <%#image_tag("waves.png", class: "w-full h-6 invert", 
         data: { controller: "dropzone", dropzone_url_value: project_drum_pattern_file_uploads_path(@project, @drum_pattern), action: "dropzone:fileadded->drum-pattern--track#fileAdded" }) %>
   </div>

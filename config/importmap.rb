@@ -9,3 +9,4 @@ pin "dropzone" # @6.0.0
 pin "just-extend" # @5.1.1
 pin "@rails/activestorage", to: "@rails--activestorage.js" # @7.1.3
 pin "@rails/request.js", to: "@rails--request.js.js" # @0.0.9
+pin "lodash.debounce" # @4.0.8

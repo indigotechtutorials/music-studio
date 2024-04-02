@@ -1,8 +1,11 @@
 Rails.application.routes.draw do
   devise_for :users
   resources :projects do
-    resources :drum_patterns, module: :projects do
-      resources :file_uploads, only: [:create]
+    scope module: :projects do
+      resources :drum_patterns do
+        resources :file_uploads, only: [:create]
+      end
+      resource :save, only: [:create], controller: :save
     end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

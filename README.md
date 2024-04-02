@@ -16,7 +16,7 @@ In the terminal go inside the code of the app and run
 
 ###### 4. Migrate the database
 In the terminal go inside the code of the app and run
-`rails db:migrate`
+`rails db:setup`
 
 ###### 5. Start the server
 Now you can start the app in the terminal by typing

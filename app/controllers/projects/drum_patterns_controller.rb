@@ -11,7 +11,13 @@ module Projects
       @drum_pattern.files.find { |f| f.blob.signed_id == params[:signed_id] }.purge
       render turbo_stream: turbo_stream.remove("blob-#{params[:signed_id].parameterize}")
     end
-
+    
+    def drag
+      @drum_pattern = @project.drum_patterns.find(params[:drum_pattern_id])
+      attachment_file = AttachmentFile.find(params[:file_id])
+      @drum_pattern.files.attach(attachment_file.file.blob)
+      render turbo_stream: turbo_stream.append("tracks", partial: "projects/drum_patterns/track", locals: { sound: @drum_pattern.files.last, drum_pattern: @drum_pattern })
+    end
     private
 
     def set_project

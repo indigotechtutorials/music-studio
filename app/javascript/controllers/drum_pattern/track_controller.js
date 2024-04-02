@@ -102,11 +102,14 @@ export default class extends Controller {
   pasteSteps(e) {
     e.preventDefault()
     this.menuTarget.classList.add("hidden")
-    this.noteTargets.forEach((t, i) => t.checked = this.drumPattern.copiedSteps[i])
+    if (this.drumPattern.copiedSteps) {
+      this.noteTargets.forEach((t, i) => t.checked = this.drumPattern.copiedSteps[i])
+    }
   }
 
   get drumPattern() {
-    let el = this.element.closest("[data-controller='drum-pattern']")
-    return this.application.getControllerForElementAndIdentifier(el, 'drum-pattern')
+    let el = this.element.closest("[data-drum-pattern='true']")
+    let thecontroller = this.application.getControllerForElementAndIdentifier(el, 'drum-pattern')
+    return thecontroller
   }
 }

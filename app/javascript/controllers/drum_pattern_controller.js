@@ -59,6 +59,7 @@ export default class extends Controller {
   }
 
   copySteps({ detail: { notes }}) {
+    console.log("Copying steps")
     this.copiedSteps = notes
   }
 

@@ -1,7 +1,10 @@
 <%= turbo_frame_tag :drum_pattern do %>
   <div class="max-w-5xl w-full mx-auto border-2 border-gray-100 rounded-lg relative px-2 py-4" 
-      data-controller="drum-pattern" 
-      data-drum-pattern-save-url-value="<%= project_save_path(@project) %>">
+      data-controller="drum-pattern draggable"
+      data-action="dragenter->draggable#dragEnter dragend@document->draggable#dragEnd"
+      data-drum-pattern-save-url-value="<%= project_save_path(@project) %>"
+      data-draggable-url-value="<%= project_drum_pattern_drag_path(@project, @drum_pattern) %>"
+      data-drum-pattern="true">
     <div class="w-full flex">
       <%= link_to "#", data: { action: "drum-pattern#play", drum_pattern_target: "play" } do %>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 text-gray-100">
@@ -21,7 +24,8 @@
         data: { 
           controller: "dropzone", dropzone_direct_upload_url_value: rails_direct_uploads_url, 
           dropzone_callback_url_value: project_drum_pattern_file_uploads_path(@project, @drum_pattern), 
-          action: "dropzone:fileadded->drum-pattern--track#fileAdded" 
+          action: "dropzone:fileadded->drum-pattern--track#fileAdded",
+          dropzone_accepted_files_value: 'audio/*',
         } %>
     </div>
     <div class="flex flex-col gap-8 mt-4" id="tracks">

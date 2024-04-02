@@ -1,25 +1,26 @@
-# README
+Make sure you have Ruby installed and download version 3.3.0 thats what im using. 
+![Screenshot 2024-04-01 235354](https://github.com/indigotechtutorials/music-studio/assets/63070125/431a5f81-f671-47e5-9628-d1b151a7bb1c)
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+#### Steps to get running
 
-Things you may want to cover:
+###### 1. Install Ruby on Rails
+Install ruby on rails for your computer either Mac, or windows if your on windows I recommend you use WSL and then follow the guide for Ubuntu.
+When your following the guide when you get to Database choose the PostgreSQL database.
+https://gorails.com/setup/macos/14-sonoma
 
-* Ruby version
+###### 2. Download code
 
-* System dependencies
+###### 3. Bundle Install to install gems
+In the terminal go inside the code of the app and run
+`bundle install`
 
-* Configuration
+###### 4. Migrate the database
+In the terminal go inside the code of the app and run
+`rails db:migrate`
 
-* Database creation
+###### 5. Start the server
+Now you can start the app in the terminal by typing
+`bin/dev`
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-# music-studio
+###### 6. View the app
+Now the app is running you can go to localhost:3000 in your browser and you will see the music making app

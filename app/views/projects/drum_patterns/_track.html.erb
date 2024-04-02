@@ -2,9 +2,10 @@
     data-drum-pattern--track-sound-value="<%= url_for(sound) %>" 
     data-action="drum-pattern:note-played->drum-pattern--track#notePlayed 
         drum-pattern:pause->drum-pattern--track#pause mousedown@window->drum-pattern--track#handleClick
-        drum-pattern--track:copy->drum-pattern#copySteps">
+        drum-pattern--track:copy->drum-pattern#copySteps"
+    id="blob-<%= sound.blob.signed_id.parameterize %>">
   <div class="flex flex-col w-10 flex-shrink-0">
-    <span class="text-xs text-gray-100 overflow-hidden w-full" data-drum-pattern--track-target="filename"> <%= sound.is_a?(String) ? sound.capitalize : sound.blob.filename.base %> </span>
+    <span class="text-xs text-gray-100 overflow-hidden w-full" data-drum-pattern--track-target="filename"> <%= sound.blob.filename.base %> </span>
     <%= image_tag "sample.png", class: "w-full h-6 invert" %>
     <%#image_tag("waves.png", class: "w-full h-6 invert", 
         data: { controller: "dropzone", dropzone_url_value: project_drum_pattern_file_uploads_path(@project, @drum_pattern), action: "dropzone:fileadded->drum-pattern--track#fileAdded" }) %>
@@ -28,5 +29,6 @@
     <%= link_to "Copy Steps", "#", data: { action: "drum-pattern--track#copySteps" } %>
     <%= link_to "Paste Steps", "#", data: { action: "drum-pattern--track#pasteSteps" } %>
     <%= link_to "Clear All Steps", "#", data: { action: "drum-pattern--track#clearAllSteps" } %>
+    <%= link_to "Remove Track", project_drum_pattern_path(drum_pattern.project, drum_pattern, signed_id: sound.blob.signed_id), data: { turbo_method: :delete } %>
   </div>
 </div>

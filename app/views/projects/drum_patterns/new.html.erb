@@ -24,9 +24,9 @@
           action: "dropzone:fileadded->drum-pattern--track#fileAdded" 
         } %>
     </div>
-    <div class="flex flex-col gap-8 mt-4">
+    <div class="flex flex-col gap-8 mt-4" id="tracks">
       <% @drum_pattern.files.each do |f| %>
-        <%= render "track", sound: f %>
+        <%= render "track", drum_pattern: @drum_pattern, sound: f %>
       <% end %>
     </div>
     <div class="h-full w-1 bg-gray-100 absolute top-0 left-8 hidden" data-drum-pattern-target="cursor"> </div>

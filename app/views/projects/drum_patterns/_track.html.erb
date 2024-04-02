@@ -1,0 +1,36 @@
+<div class="w-full h-10 overflow-hidden flex gap-[2px]" data-controller="drum-pattern--track" data-drum-pattern-target="track" 
+    data-drum-pattern--track-sound-value="<%= sound.is_a?(String) ? sound : url_for(sound) %>" 
+    data-action="drum-pattern:note-played->drum-pattern--track#notePlayed 
+        drum-pattern:pause->drum-pattern--track#pause mousedown@window->drum-pattern--track#handleClick
+        drum-pattern--track:copy->drum-pattern#copySteps">
+  <div class="flex flex-col w-10 flex-shrink-0">
+    <span class="text-xs text-gray-100 overflow-hidden w-full" data-drum-pattern--track-target="filename"> <%= sound.is_a?(String) ? sound.capitalize : sound.blob.filename.base %> </span>
+    <% if sound.is_a?(String) %>
+      <%= image_tag "#{sound}.png", class: "w-full h-6 invert" %>
+    <% else %>
+      <%= image_tag "sample.png", class: "w-full h-6 invert" %>
+    <% end %>
+    <%#image_tag("waves.png", class: "w-full h-6 invert", 
+        data: { controller: "dropzone", dropzone_url_value: project_drum_pattern_file_uploads_path(@project, @drum_pattern), action: "dropzone:fileadded->drum-pattern--track#fileAdded" }) %>
+  </div>
+  <% (1..64).each_slice(4).each_with_index do |arr, i| %>
+    <% arr.each do |n| %>
+      <div class="w-full">
+        <label>
+          <%= check_box_tag "note-#{n}", class: "hidden peer", data: { "drum-pattern--track-target": "note", index: n } %>
+          <div class="h-full <%= i % 2 == 0 ? "bg-gray-500 peer-checked:bg-gray-100" : "bg-red-500 peer-checked:bg-red-200" %>">
+
+          </div>
+        </label>
+      </div>
+    <% end %>
+  <% end %>
+  <div class="absolute w-40 h-56 bg-gray-500 rounded-lg text-gray-100 hidden flex flex-col gap-4 text-sm z-[1000] overflow-y-auto" data-drum-pattern--track-target="menu">
+    <%= link_to "Fill 2 steps", "#", data: { action: "drum-pattern--track#fillTwoSteps" } %>
+    <%= link_to "Fill 4 steps", "#", data: { action: "drum-pattern--track#fillFourSteps" } %>
+    <%= link_to "Fill All steps", "#", data: { action: "drum-pattern--track#fillAllSteps" } %>
+    <%= link_to "Copy Steps", "#", data: { action: "drum-pattern--track#copySteps" } %>
+    <%= link_to "Paste Steps", "#", data: { action: "drum-pattern--track#pasteSteps" } %>
+    <%= link_to "Clear All Steps", "#", data: { action: "drum-pattern--track#clearAllSteps" } %>
+  </div>
+</div>

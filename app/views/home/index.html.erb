@@ -1,0 +1,11 @@
+<div class="w-full min-h-screen flex flex-col items-center pt-36">
+  <div class="flex items-center gap-4">
+    <%= image_tag "pot.png", class: "w-32 object-cover" %>
+    <h1 class="text-7xl font-logo"> Jam-Pot </h1>
+  </div>
+  <p class="text-4xl font-hand"> Make music anywhere and include your friends </p>
+  <div class="flex items-center justify-center gap-4">
+    <%= link_to "Sign in", new_user_session_path, class: "text-xl" %>
+    <%= link_to "Create account", new_user_registration_path, class: "text-lg bg-blue-500 p-2 rounded-full text-blue-100" %>
+  </div>
+</div>

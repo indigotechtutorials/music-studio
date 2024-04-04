@@ -4,7 +4,11 @@ Rails.application.routes.draw do
     scope module: :projects do
       resources :drum_patterns do
         resources :file_uploads, only: [:create]
-         post "drag", to: "drum_patterns#drag"
+        resources :drum_pattern_tracks, only: [] do
+          post "save", to: "drum_pattern_tracks#save"
+        end
+        post "drag", to: "drum_patterns#drag"
+        
       end
       resource :save, only: [:create], controller: :save
     end

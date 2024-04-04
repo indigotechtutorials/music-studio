@@ -1,5 +1,9 @@
-<div class="flex flex-col justify-between bg-gray-700 p-16">
-  <%# link_to "Add Drum Pattern", new_project_drum_pattern_path(@project), class: "text-gray-100", data: { turbo_frame: "drum_pattern" } %>
-  <%= turbo_frame_tag :drum_pattern, src: new_project_drum_pattern_path(@project) %>
+<div class="flex flex-col justify-between bg-gray-700 min-h-screen p-16 ml-36">
+  <div class="grid grid-cols-4 gap-8 w-full">
+    <%= link_to "New Project", new_project_path, class: "project-card" %>
+    <% current_user.projects.each.with_index do |project, i| %>
+      <%= link_to "Project #{i + 1}", project, class: "project-card" %>
+    <% end %>
+  </div>
   <%= render "sidebar" %>
 </div>

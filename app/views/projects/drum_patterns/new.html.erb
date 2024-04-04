@@ -28,11 +28,11 @@
           dropzone_accepted_files_value: 'audio/*',
         } %>
     </div>
-    <div class="flex flex-col gap-8 mt-4 overflow-x-scroll" id="tracks">
-      <% @drum_pattern.files.each do |f| %>
-        <%= render "track", drum_pattern: @drum_pattern, sound: f %>
+    <div class="flex flex-col gap-8 mt-4 overflow-x-auto" id="tracks">
+      <% @drum_pattern.drum_pattern_tracks.each do |track| %>
+        <%= render "track", drum_pattern: @drum_pattern, track: track %>
       <% end %>
     </div>
-    <div class="h-full w-1 bg-gray-100 absolute top-0 left-12" data-drum-pattern-target="cursor"> </div>
+    <div class="hidden h-full w-1 bg-gray-100 absolute top-0 left-12" data-drum-pattern-target="cursor"> </div>
   </div>
 <% end %>

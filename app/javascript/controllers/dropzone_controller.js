@@ -26,35 +26,35 @@ export default class extends Controller {
       if (!this.hasDirectUploadUrlValue) {
         return
       }
-
-      console.log("uploading")
-
-      const upload = new DirectUpload(file, this.directUploadUrlValue)
-
-      upload.create((error, blob) => {
-        if (error) {
-          // Handle the error
-        } else {
-          // Add an appropriately-named hidden input to the form with a
-          //  value of blob.signed_id so that the blob ids will be
-          //  transmitted in the normal upload flow
-          if (this.hasCallbackUrlValue) {
-            console.log("posting to callback")
-            post(this.callbackUrlValue, {
-              body: {
-                blob_signed_id: blob.signed_id,
-                fullPath: file.fullPath,
-              }
-            })
+      
+      setTimeout(() => {
+        const upload = new DirectUpload(file, this.directUploadUrlValue)
+  
+        upload.create((error, blob) => {
+          if (error) {
+            // Handle the error
+          } else {
+            // Add an appropriately-named hidden input to the form with a
+            //  value of blob.signed_id so that the blob ids will be
+            //  transmitted in the normal upload flow
+            if (this.hasCallbackUrlValue) {
+              console.log("posting to callback")
+              post(this.callbackUrlValue, {
+                body: {
+                  blob_signed_id: blob.signed_id,
+                  fullPath: file.fullPath,
+                }
+              })
+            }
           }
-        }
-      })
+        })
+        this.element.dispatchEvent(new CustomEvent("dropzone:fileadded", {
+          detail: {
+            file: file
+          }
+        }))
+      }, 500)
 
-      this.element.dispatchEvent(new CustomEvent("dropzone:fileadded", {
-        detail: {
-          file: file
-        }
-      }))
     });
   }
 }

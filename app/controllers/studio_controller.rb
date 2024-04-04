@@ -4,6 +4,5 @@ class StudioController < ApplicationController
       @user = User.last || User.create(email: "bruh@g.com", password: "555555")
       sign_in(@user)
     end
-    @project = Project.last || Project.create(user: current_user)
   end
 end

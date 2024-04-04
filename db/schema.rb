@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_02_164111) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_04_224459) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -58,6 +58,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_02_164111) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "drum_pattern_tracks", force: :cascade do |t|
+    t.text "note_data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "drum_pattern_id", null: false
+    t.index ["drum_pattern_id"], name: "index_drum_pattern_tracks_on_drum_pattern_id"
+  end
+
   create_table "drum_patterns", force: :cascade do |t|
     t.bigint "project_id", null: false
     t.datetime "created_at", null: false
@@ -97,6 +105,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_02_164111) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "attachment_files", "attachment_folders"
+  add_foreign_key "drum_pattern_tracks", "drum_patterns"
   add_foreign_key "drum_patterns", "projects"
   add_foreign_key "drumkits", "users"
   add_foreign_key "projects", "users"

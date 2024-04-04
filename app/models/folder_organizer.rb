@@ -8,7 +8,9 @@ class FolderOrganizer
 
   def call
     parent_folder = drumkit.attachment_folders.find_or_create_by(name: full_path[0])
-    if full_path.count > 1
+    # this is 3 full path size
+    # if /kit/808/fire_sound.mp3
+    if full_path.count > 2
       child_paths = full_path[1..]
       puts "Child paths: #{child_paths}"
       folders_h = {}
@@ -27,6 +29,9 @@ class FolderOrganizer
           folders_h[i] = folder
         end
       end
+    else
+      # if /kit/fire_sound.wav
+      parent_folder.attachment_files.create(filename: full_path.last, file: file)
     end
   end
 end

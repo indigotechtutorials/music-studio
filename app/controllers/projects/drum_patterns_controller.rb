@@ -15,8 +15,9 @@ module Projects
     def drag
       @drum_pattern = @project.drum_patterns.find(params[:drum_pattern_id])
       attachment_file = AttachmentFile.find(params[:file_id])
-      @drum_pattern.files.attach(attachment_file.file.blob)
-      render turbo_stream: turbo_stream.append("tracks", partial: "projects/drum_patterns/track", locals: { sound: @drum_pattern.files.last, drum_pattern: @drum_pattern })
+      @drum_pattern_track = @drum_pattern.drum_pattern_tracks.create 
+      @drum_pattern_track.file.attach(attachment_file.file.blob)
+      render turbo_stream: turbo_stream.append("tracks", partial: "projects/drum_patterns/track", locals: { track: @drum_pattern_track, drum_pattern: @drum_pattern })
     end
     private
 

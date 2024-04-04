@@ -1,0 +1,7 @@
+
+<div class="flex flex-col justify-between bg-gray-700 min-h-screen p-16 ml-36">
+  <% @project.drum_patterns.each do |drum_pattern| %>
+    <%= turbo_frame_tag :drum_pattern, src: new_project_drum_pattern_path(@project, drum_pattern) %>
+  <% end %>
+  <%= render "studio/sidebar" %>
+</div>

@@ -11,10 +11,8 @@ class DrumkitsController < ApplicationController
   end
 
   def upload_file
-    ActiveRecord::Base.transaction do
-      full_path = params["fullPath"].split("/")
-      @drumkit = current_user.drumkits.find_or_create_by(name: full_path[0])
-      FolderOrganizer.new(@drumkit, params["fullPath"], params[:blob_signed_id]).call
-    end
+    full_path = params["fullPath"].split("/")
+    @drumkit = current_user.drumkits.find_or_create_by(name: full_path[0])
+    FolderOrganizer.new(@drumkit, params["fullPath"], params[:blob_signed_id]).call
   end
 end

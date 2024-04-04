@@ -12,6 +12,12 @@
 
 */
 
+@layer components {
+  .project-card {
+    @apply bg-gray-800 text-gray-500 text-2xl h-40 w-full flex items-center justify-center rounded-lg font-bold
+  }
+}
+
 @layer base {
   @font-face {
     font-family: "Logo";

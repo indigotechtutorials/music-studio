@@ -1,9 +1,15 @@
 import { Controller } from "@hotwired/stimulus"
+import { post } from "@rails/request.js"
+import debounce from "lodash.debounce";
 
 // Connects to data-controller="drum-pattern--track"
 export default class extends Controller {
   static targets = ["filename", "note", "menu"]
-  static values = { sound: String }
+  static values = { sound: String, saveUrl: String }
+
+  initialize() {
+    this.save = debounce(this.save, 1000).bind(this)
+  }
 
   connect() {
     this.audio = new Audio()
@@ -64,6 +70,7 @@ export default class extends Controller {
       } else {
         t.checked = false
       }
+      t.dispatchEvent(new CustomEvent("change"))
     })
   }
 
@@ -76,19 +83,26 @@ export default class extends Controller {
       } else {
         t.checked = false
       }
+      t.dispatchEvent(new CustomEvent("change"))
     })
   }
 
   fillAllSteps(e) {
     e.preventDefault()
     this.menuTarget.classList.add("hidden")
-    this.noteTargets.forEach(t => t.checked = true)
+    this.noteTargets.forEach(t => {
+      t.dispatchEvent(new CustomEvent("change"))
+      t.checked = true
+    })
   }
 
   clearAllSteps(e) {
     e.preventDefault()
     this.menuTarget.classList.add("hidden")
-    this.noteTargets.forEach(t => t.checked = false)
+    this.noteTargets.forEach(t => { 
+      t.dispatchEvent(new CustomEvent("change"))
+      t.checked = false
+    })
   }
 
   copySteps(e) {
@@ -103,8 +117,25 @@ export default class extends Controller {
     e.preventDefault()
     this.menuTarget.classList.add("hidden")
     if (this.drumPattern.copiedSteps) {
-      this.noteTargets.forEach((t, i) => t.checked = this.drumPattern.copiedSteps[i])
+      this.noteTargets.forEach((t, i) => { 
+        t.dispatchEvent(new CustomEvent("change"))
+        t.checked = this.drumPattern.copiedSteps[i]
+      })
     }
+  }
+
+  async save() {
+    let trackData = this.noteTargets.map((note, i) => {
+      return {
+        noteIndex: i + 1,
+        checked: note.checked
+      }
+    })
+    await post(this.saveUrlValue, {
+      body: {
+        trackData: trackData
+      }
+    })
   }
 
   get drumPattern() {

@@ -1,4 +1,4 @@
-<div class="w-full h-10 overflow-hidden flex gap-[2px]" data-controller="drum-pattern--track" data-drum-pattern-target="track" 
+<div class="w-full h-10 flex gap-[2px]" data-controller="drum-pattern--track" data-drum-pattern-target="track" 
     data-drum-pattern--track-sound-value="<%= url_for(sound) %>" 
     data-action="drum-pattern:note-played->drum-pattern--track#notePlayed 
         drum-pattern:pause->drum-pattern--track#pause mousedown@window->drum-pattern--track#handleClick
@@ -12,10 +12,10 @@
   </div>
   <% (1..64).each_slice(4).each_with_index do |arr, i| %>
     <% arr.each do |n| %>
-      <div class="w-full">
+      <div class="w-4 flex-shrink-0">
         <label>
           <%= check_box_tag "note-#{n}", class: "hidden peer", data: { "drum-pattern--track-target": "note", index: n } %>
-          <div class="h-full <%= i % 2 == 0 ? "bg-gray-500 peer-checked:bg-gray-100" : "bg-red-500 peer-checked:bg-red-200" %>">
+          <div class="h-full <%= i % 2 == 0 ? "bg-gray-500 peer-checked:bg-gray-100" : "bg-indigo-500 peer-checked:bg-indigo-200" %>">
 
           </div>
         </label>

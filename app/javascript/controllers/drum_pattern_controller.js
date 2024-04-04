@@ -43,13 +43,13 @@ export default class extends Controller {
         if (!this.isPlaying) {
           return
         }
-        this.cursorTarget.style.left = `${40 + i * 15}px`
+        this.cursorTarget.style.left = `${48 + i * 18}px`
         this.trackTargets.forEach(track => track.dispatchEvent(new CustomEvent("drum-pattern:note-played", { detail: { noteIndex: i + 1 }})))
 
         this.currentNote += 1
         if (this.currentNote > 64) {
           setTimeout(() => {          
-            this.cursorTarget.style.left = '40px'
+            this.cursorTarget.style.left = '48px'
             this.startLoop()
           }, this.timeDelay)
         }

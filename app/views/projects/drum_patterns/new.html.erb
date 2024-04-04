@@ -1,5 +1,5 @@
 <%= turbo_frame_tag :drum_pattern do %>
-  <div class="max-w-5xl w-full mx-auto border-2 border-gray-100 rounded-lg relative px-2 py-4" 
+  <div class="ml-36 border-2 border-gray-100 rounded-lg relative px-2 py-4" 
       data-controller="drum-pattern draggable"
       data-action="dragenter->draggable#dragEnter dragend@document->draggable#dragEnd"
       data-drum-pattern-save-url-value="<%= project_save_path(@project) %>"
@@ -20,7 +20,7 @@
       
       <%= number_field_tag :bpm, @project.bpm, class: "w-20 bg-gray-600 rounded-lg text-gray-100", data: { drum_pattern_target: "bpm", action: "drum-pattern#save" } %>
     
-      <%= image_tag "sample.png", class: "w-10 bg-indigo-500 text-indigo-100 p-2 rouded-lg ml-4 rounded-lg cursor-pointer", 
+      <%# image_tag "sample.png", class: "w-10 bg-indigo-500 text-indigo-100 p-2 rouded-lg ml-4 rounded-lg cursor-pointer", 
         data: { 
           controller: "dropzone", dropzone_direct_upload_url_value: rails_direct_uploads_url, 
           dropzone_callback_url_value: project_drum_pattern_file_uploads_path(@project, @drum_pattern), 
@@ -28,11 +28,11 @@
           dropzone_accepted_files_value: 'audio/*',
         } %>
     </div>
-    <div class="flex flex-col gap-8 mt-4" id="tracks">
+    <div class="flex flex-col gap-8 mt-4 overflow-x-scroll" id="tracks">
       <% @drum_pattern.files.each do |f| %>
         <%= render "track", drum_pattern: @drum_pattern, sound: f %>
       <% end %>
     </div>
-    <div class="h-full w-1 bg-gray-100 absolute top-0 left-8 hidden" data-drum-pattern-target="cursor"> </div>
+    <div class="h-full w-1 bg-gray-100 absolute top-0 left-12" data-drum-pattern-target="cursor"> </div>
   </div>
 <% end %>

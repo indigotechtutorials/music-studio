@@ -4,7 +4,7 @@
     data-action="drum-pattern:note-played->drum-pattern--track#notePlayed 
         drum-pattern:pause->drum-pattern--track#pause mousedown@window->drum-pattern--track#handleClick
         drum-pattern--track:copy->drum-pattern#copySteps"
-    id="blob-<%= track.file.blob.signed_id.parameterize %>">
+    id="<%= dom_id(track) %>">
   <div class="flex flex-col w-10 flex-shrink-0">
     <span class="text-xs text-gray-100 overflow-hidden w-full" data-drum-pattern--track-target="filename"> <%= track.file.blob.filename.base %> </span>
     <%= image_tag "sample.png", class: "w-full h-6 invert" %>
@@ -18,7 +18,7 @@
         <label>
           <%= check_box_tag "note-#{n}", "1", checked: is_checked, class: "hidden peer", data: { "drum-pattern--track-target": "note", index: n, 
               action: "change->drum-pattern--track#save" } %>
-          <div class="h-full <%= i % 2 == 0 ? "bg-gray-500 peer-checked:bg-gray-100" : "bg-pink-500 peer-checked:bg-pink-200" %>">
+          <div class="h-full <%= i % 2 == 0 ? "bg-gray-500 peer-checked:bg-gray-100" : "bg-indigo-500 peer-checked:bg-indigo-200" %>">
 
           </div>
         </label>
@@ -32,6 +32,6 @@
     <%= link_to "Copy Steps", "#", data: { action: "drum-pattern--track#copySteps" } %>
     <%= link_to "Paste Steps", "#", data: { action: "drum-pattern--track#pasteSteps" } %>
     <%= link_to "Clear All Steps", "#", data: { action: "drum-pattern--track#clearAllSteps" } %>
-    <%= link_to "Remove Track", project_drum_pattern_path(drum_pattern.project, drum_pattern, signed_id: track.file.blob.signed_id), data: { turbo_method: :delete } %>
+    <%= link_to "Remove Track", project_drum_pattern_path(drum_pattern.project, drum_pattern, drum_pattern_track_id: track.id), data: { turbo_method: :delete } %>
   </div>
 </div>

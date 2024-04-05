@@ -3,11 +3,10 @@ import { post } from "@rails/request.js"
 // Connects to data-controller="draggable"
 export default class extends Controller {
   static values = { url: String }
-  connect() {
-    console.log("Hola")
-  }
   
-  dragStart(ev) {
+  dragStart(e) {
+    e.dataTransfer.clearData();
+    e.dataTransfer.setData('text/plain', e.target.dataset.id)
   }
 
   dragEnter(e) {
@@ -16,13 +15,28 @@ export default class extends Controller {
     }
   }
 
+  dragOver(e) {
+    console.log("Dragging over")
+    e.preventDefault()
+  }
+
   async dragEnd(e) {
+    console.log("drag end")
     if (this.element.classList.contains("bg-indigo-500")) {
       this.element.classList.remove("bg-indigo-500")
     }
     await post(this.urlValue, { 
       body: {
-        file_id: e.target.dataset.id,
+        drag_id: e.target.dataset.id,
+      }
+    })
+  }
+
+  async drop(e) {
+    let dataId = e.dataTransfer.getData('text/plain')
+    await post(this.urlValue, { 
+      body: {
+        drag_id: dataId,
       }
     })
   }

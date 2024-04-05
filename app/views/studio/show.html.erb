@@ -1,6 +1,6 @@
 <div class="flex flex-col justify-between bg-gray-700 min-h-screen p-16 ml-36">
   <div class="grid grid-cols-4 gap-8 w-full">
-    <%= link_to "New Project", new_project_path, class: "project-card" %>
+    <%= link_to "New Project", projects_path, class: "project-card", data: { turbo_method: :post } %>
     <% current_user.projects.each.with_index do |project, i| %>
       <%= link_to "Project #{i + 1}", project, class: "project-card" %>
     <% end %>

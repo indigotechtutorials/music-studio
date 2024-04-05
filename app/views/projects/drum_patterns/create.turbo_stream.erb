@@ -1,0 +1,8 @@
+<%= turbo_stream.replace("drum_pattern") do %>
+  <%= turbo_frame_tag :drum_pattern, src: project_drum_pattern_path(@project, @drum_pattern) %>
+<% end %>
+
+<%= turbo_stream.replace("drum-pattern-select") do %>
+  <%= select_tag :drum_pattern, options_for_select(@drum_pattern_options, @selected_url), class: "bg-gray-700 text-gray-100 rounded-lg", 
+          data: { action: "change->project#setDrumPattern" }, id: "drum-pattern-select" %>
+<% end %>

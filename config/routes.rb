@@ -8,9 +8,10 @@ Rails.application.routes.draw do
           post "save", to: "drum_pattern_tracks#save"
         end
         post "drag", to: "drum_patterns#drag"
-        
+        post "data", to: "drum_patterns#data"
       end
       resource :save, only: [:create], controller: :save
+      resources :playlists, only: [:create]
     end
   end
   resources :drumkits, only: [:create] do

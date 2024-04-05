@@ -1,15 +1,9 @@
 import { Controller } from "@hotwired/stimulus"
-import { post } from "@rails/request.js"
-import debounce from "lodash.debounce";
 
 // Connects to data-controller="drum-pattern"
 export default class extends Controller {
   static targets = ["play", "pause", "cursor", "track", "bpm"]
   static values = { saveUrl: String }
-  
-  initialize() {
-    this.save = debounce(this.save, 1000).bind(this)
-  }
   
   connect() {
     this.isPlaying = false
@@ -63,20 +57,13 @@ export default class extends Controller {
     this.copiedSteps = notes
   }
 
-  save() {
-    console.log("Saving", this.saveUrlValue)
-    post(this.saveUrlValue, {
-      body: {
-        bpm: this.bpm,
-      }
-    })
+  get timeDelay() {
+    return 60_000 / this.bpm / 4 
   }
 
   get bpm() {
-    return this.bpmTarget.value
-  }
-
-  get timeDelay() {
-    return 60_000 / this.bpm / 4 
+    let projectEl = this.element.closest("[data-controller*='project'")
+    const projectController = this.application.getControllerForElementAndIdentifier(projectEl, 'project')
+    return projectController.bpm
   }
 }

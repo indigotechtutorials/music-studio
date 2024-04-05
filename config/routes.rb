@@ -11,7 +11,7 @@ Rails.application.routes.draw do
         post "data", to: "drum_patterns#data"
       end
       resource :save, only: [:create], controller: :save
-      resources :playlists, only: [:create]
+      resources :playlists, only: [:create, :update]
     end
   end
   resources :drumkits, only: [:create] do

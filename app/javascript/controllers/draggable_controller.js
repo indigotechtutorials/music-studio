@@ -16,12 +16,10 @@ export default class extends Controller {
   }
 
   dragOver(e) {
-    console.log("Dragging over")
     e.preventDefault()
   }
 
   async dragEnd(e) {
-    console.log("drag end")
     if (this.element.classList.contains("bg-indigo-500")) {
       this.element.classList.remove("bg-indigo-500")
     }
@@ -34,6 +32,9 @@ export default class extends Controller {
 
   async drop(e) {
     let dataId = e.dataTransfer.getData('text/plain')
+    if (!dataId) {
+      return;
+    }
     await post(this.urlValue, { 
       body: {
         drag_id: dataId,

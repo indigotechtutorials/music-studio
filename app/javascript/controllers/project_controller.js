@@ -28,7 +28,7 @@ export default class extends Controller {
   }
 
   startPlayingLoop() {
-    let playlistLength = Array.from(Array(64).keys())
+    let playlistLength = Array.from(Array(64 * 4).keys())
     let timeDelay = 60_000 / this.bpm / 4
     this.timeouts = [] 
     playlistLength.forEach(i => {

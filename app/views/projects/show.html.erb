@@ -3,7 +3,7 @@
     data-project-save-url-value="<%= project_save_path(@project) %>"
     data-project-new-drum-pattern-url-value="<%= project_drum_patterns_path(@project) %>">
   <div class="ml-36">
-    <div class="mb-4 flex">
+    <div class="mb-4 flex gap-4">
       <%= link_to "#", data: { action: "project#play", project_target: "play" } do %>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 text-gray-100">
           <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
@@ -20,7 +20,7 @@
       <%= number_field_tag :bpm, @project.bpm, class: "w-20 bg-gray-600 rounded-lg text-gray-100", data: { project_target: "bpm", action: "project#save" } %>
     </div>
     <div class="w-full flex flex-col gap-2 overflow-x-auto mb-4 relative">
-      <div data-project-target="cursor" class="w-2 h-full bg-white absolute top-8 left-20 rounded-lg z-[100]"></div>
+      <div data-project-target="cursor" class="hidden w-2 h-full bg-white absolute top-8 left-20 rounded-lg z-[100]"></div>
 
       <div class="flex ml-20">
         <% (1..16).each do |n| %>
@@ -32,18 +32,21 @@
             data-draggable-url-value="<%= project_playlists_path(@project, track_index: n) %>"
             data-action="drop->draggable#drop dragover->draggable#dragOver"
         >
-          <span class="w-20 flex items-center justify-center border-r-2 border-gray-700 text-gray-100"> Track <%= n %> </span>
-          <div class="h-16 w-full flex relative">
+          <% @playlist_track = @project.playlist_tracks.where(track_index: n)&.first %>
+          <span class="w-20 flex items-center justify-center border-r-2 border-gray-700 text-gray-100 flex-shrink-0"> Track <%= n %> </span>
+          <div class="h-16 w-full flex relative"
+            data-controller="<%= "playlist-track" if @playlist_track %>" data-project-target="playlistTrack" 
+            data-playlist-track-url-value="<%= project_drum_pattern_data_path(@project, @playlist_track.drum_pattern) if @playlist_track %>"
+            data-playlist-track-save-url-value="<%= project_playlist_path(@project, @playlist_track) if @playlist_track %>"
+            data-playlist-track-playlist-position-value="<%= @playlist_track&.playlist_position %>"
+            data-action="note-playing->playlist-track#play mousedown->playlist-track#grab mouseup@window->playlist-track#letgo mousemove->playlist-track#move">
             <% (1..64).each do |n| %>
               <div class="h-full w-4 text-gray-100 flex-shrink-0 border-r border-gray-500"></div>
             <% end %>
-            <% if @drum_pattern = @project.playlist_tracks.where(track_index: n)&.first&.drum_pattern %>
-              <div class="absolute h-full top-0 w-64 p-1">
-                <div class="h-full w-full bg-indigo-500 text-indigo-100 flex items-center justify-center rounded-lg" 
-                data-controller="playlist-track" data-project-target="playlistTrack" 
-                data-playlist-track-url-value="<%= project_drum_pattern_data_path(@project, @drum_pattern)%>"
-                data-action="note-playing->playlist-track#play">
-                  Drum Pattern <%= @drum_pattern.index %>
+            <% if @playlist_track %>
+              <div class="absolute h-full top-0 w-64 p-1 playlist-track-container" style="left: <%= (@playlist_track&.playlist_position * 16) if @playlist_track&.playlist_position %>px">
+                <div class="h-full w-full bg-indigo-500 text-indigo-100 flex items-center justify-center rounded-lg">
+                  Drum Pattern <%= @playlist_track.drum_pattern.index %>
                 </div>
               </div>
             <% end %>
@@ -56,6 +59,25 @@
         <div class="bg-gray-600 text-gray-100 h-16 flex items-center justify-center rounded-lg cursor-pointer hover:bg-indigo-500 hover:text-indigo-100" 
             draggable="true" data-id="<%= drum_pattern.id %>" data-controller="draggable" data-action="dragstart->draggable#dragStart"> Drum Pattern <%= i + 1 %> </div>
       <% end %>
+    </div>
+
+    <div data-controller="keyboard" class="my-4">
+      <div class="settingsBar flex gap-4">
+        <div class="flex items-center gap-4">
+          <span class="text-sm text-gray-100">Volume: </span>
+          <%= range_field_tag "volume", 0.5, min: 0.0, max: 1.0, step: 0.01 , data: { keyboard_target: "volume", action: "keyboard#updateVolume" } %>
+        </div>
+        <div class="flex items-center gap-4">
+          <span class="text-sm text-gray-100">Current waveform: </span>
+          <%= select_tag :waveform, options_for_select(["sine", "square", "sawtooth", "triangle", "custom"].map { |n| [n.capitalize, n]}), data: { keyboard_target: "waveform" } %>
+        </div>
+      </div>
+      <div class="flex gap-1 bg-gray-100 mr-auto max-w-sm">
+        <% ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'].each do |key| %>
+          <div class="<%= key.include?('b') ? "w-4 bg-black hover:bg-gray-800 text-gray-100 h-32" : "w-8 bg-white hover:bg-gray-400 h-40" %> flex items-center justify-center"
+            data-action="click->keyboard#playNote" data-keyboard-note-param="<%= key %>"><%= key %></div>
+        <% end %>
+      </div>      
     </div>
     <%= turbo_frame_tag :drum_pattern %>
     <%= render "studio/sidebar" %>

@@ -75,7 +75,7 @@
       <div class="flex gap-1 bg-gray-100 mr-auto max-w-sm">
         <% ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'].each do |key| %>
           <div class="<%= key.include?('b') ? "w-4 bg-black hover:bg-gray-800 text-gray-100 h-32" : "w-8 bg-white hover:bg-gray-400 h-40" %> flex items-center justify-center"
-            data-action="click->keyboard#playNote" data-keyboard-note-param="<%= key %>"><%= key %></div>
+            data-action="mousedown->keyboard#playNote mouseup@window->keyboard#releaseNote" data-keyboard-note-param="<%= key %>"><%= key %></div>
         <% end %>
       </div>      
     </div>

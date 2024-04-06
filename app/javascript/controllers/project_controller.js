@@ -8,6 +8,7 @@ export default class extends Controller {
   static values = { saveUrl: String, newDrumPatternUrl: String}
   initialize() {
     this.save = debounce(this.save, 1000).bind(this)
+    this.originalLocation = window.location.href
   }
   
   play(e) {
@@ -52,16 +53,15 @@ export default class extends Controller {
 
   async setDrumPattern(e) {
     if (e.target.value == "") {
-      const turboFrame = this.element.querySelector("turbo-frame[id='drum_pattern']")
-      turboFrame.src = null
-      turboFrame.innerHTML = ""
+      const turboFrame = this.element.querySelector("turbo-frame[id='project']")
+      turboFrame.src = this.originalLocation
     }
     if (e.target.value == "new_pattern") {
       await post(this.newDrumPatternUrlValue, { 
         responseKind: 'turbo-stream',
       })
     } else {
-      const turboFrame = this.element.querySelector("turbo-frame[id='drum_pattern']")
+      const turboFrame = this.element.querySelector("turbo-frame[id='project']")
       turboFrame.src = e.target.value
     }
   }

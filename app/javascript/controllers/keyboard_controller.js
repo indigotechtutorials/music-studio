@@ -2,42 +2,42 @@ import { Controller } from "@hotwired/stimulus";
 
 // Connects to data-controller="keyboard"
 export default class extends Controller {
-  static targets = ["volume", "waveform"];
-  setup() {
-    if (this.setupComplete) {
-      return;
-    }
-    this.audioContext = new AudioContext();
-    this.oscList = [];
-    this.mainGainNode = this.audioContext.createGain();
-    this.mainGainNode.connect(this.audioContext.destination);
-    this.mainGainNode.gain.value = this.volumeTarget.value;
-    let sineTerms = new Float32Array([0, 0, 1, 0, 1]);
-    let cosineTerms = new Float32Array(sineTerms.length);
-    this.customWaveform = this.audioContext.createPeriodicWave(
-      cosineTerms,
-      sineTerms
-    );
-    this.octave = 5;
-    this.setupComplete = true;
-  }
+  static targets = ["volume", "waveform", "biquad", "biquadFreq", "biquadPeak"];
 
-  playNote({ params: { note } }) {
-    this.setup();
-    let freq = this.noteFreq[note][this.octave];
-    this.osc = this.audioContext.createOscillator();
-    this.osc.connect(this.mainGainNode);
+  playNote({ params: { note, octave } }) {
+    let audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    let oscList = [];
+    let mainGainNode = audioContext.createGain();
+    mainGainNode.gain.value = this.volumeTarget.value;
+    let freq = this.noteFreq[note][octave];
+    let osc = audioContext.createOscillator();
+    this.osc = osc
+    // connect gain to osc
+    mainGainNode.connect(audioContext.destination);
+    osc.connect(mainGainNode);
 
     const type = this.waveformTarget.value;
 
     if (type === "custom") {
-      this.osc.setPeriodicWave(this.customWaveform);
+      osc.setPeriodicWave(customWaveform);
     } else {
-      this.osc.type = type;
+      osc.type = type;
     }
 
-    this.osc.frequency.value = freq;
-    this.osc.start();
+    osc.frequency.setValueAtTime(420, audioContext.currentTime);
+
+    //let cutOff = parseFloat(this.convolverTarget.value) * 10000
+    //console.log(cutOff)
+    const biquadFilter = audioContext.createBiquadFilter();
+    biquadFilter.type = this.biquadTarget.value;
+    console.log(this.biquadFreqTarget.value)
+    biquadFilter.frequency.setValueAtTime(this.biquadFreqTarget.value, audioContext.currentTime + 0.5);
+    osc.connect(biquadFilter);
+    biquadFilter.connect(audioContext.destination);
+
+    osc.start();
+    // const convolver = this.audioContext.createConvolver();
+    // this.osc.connect(convolver)
   }
 
   releaseNote() {
@@ -47,7 +47,19 @@ export default class extends Controller {
   }
 
   updateVolume() {
+    if (!this.mainGainNode) {
+      return
+    }
     this.mainGainNode.gain.value = this.volumeTarget.value;
+  }
+
+  get customWaveform() {
+    let sineTerms = new Float32Array([0, 0, 1, 0, 1]);
+    let cosineTerms = new Float32Array(sineTerms.length);
+    return this.audioContext.createPeriodicWave(
+      cosineTerms,
+      sineTerms
+    );
   }
 
   get noteFreq() {

@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       end
       resource :save, only: [:create], controller: :save
       resources :playlists, only: [:create, :update]
+      resource :keyboard, only: [:show], controller: :keyboard
     end
   end
   resources :drumkits, only: [:create] do

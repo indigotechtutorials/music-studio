@@ -32,9 +32,21 @@ export default class extends Controller {
 
   startLoop() {
     this.currentNote = 1
+    this.tracksComplete = {}
     Array(64).fill(0).forEach((_, i) => {
       let timeout = setTimeout(() => {
         if (!this.isPlaying) {
+          return
+        }
+        if (Object.keys(this.tracksComplete).length >= this.trackTargets.length) {
+          if (i % 8 != 0) {
+            this.cursorTarget.style.left = `${48 + i * 18}px`
+            this.trackTargets.forEach(track => track.dispatchEvent(new CustomEvent("drum-pattern:note-played", { detail: { noteIndex: i + 1 }})))
+            return
+          }
+          this.timeouts.forEach(timeout => clearTimeout(timeout))
+          this.cursorTarget.style.left = '48px'
+          this.startLoop()
           return
         }
         this.cursorTarget.style.left = `${48 + i * 18}px`
@@ -53,8 +65,16 @@ export default class extends Controller {
   }
 
   copySteps({ detail: { notes }}) {
-    console.log("Copying steps")
     this.copiedSteps = notes
+  }
+
+  trackComplete(index) {
+    let complete = this.tracksComplete[index]
+    if (complete) {
+      return
+    } else {
+      this.tracksComplete[index] = true
+    }
   }
 
   get timeDelay() {

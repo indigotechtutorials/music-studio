@@ -5,7 +5,7 @@ import debounce from "lodash.debounce";
 // Connects to data-controller="drum-pattern--track"
 export default class extends Controller {
   static targets = ["filename", "note", "menu"];
-  static values = { sound: String, saveUrl: String };
+  static values = { sound: String, saveUrl: String, index: Number };
 
   initialize() {
     this.save = debounce(this.save, 1000).bind(this);
@@ -31,6 +31,10 @@ export default class extends Controller {
 
   notePlayed({ detail: { noteIndex } }) {
     let note = this.noteTargets.find((n) => n.dataset.index == noteIndex);
+    let nextNotes = this.noteTargets.filter((n) => n.dataset.index > noteIndex && n['checked'] == true)
+    if (nextNotes.length == 0) {
+      this.drumPattern.trackComplete(this.indexValue)
+    }
     if (note.checked) {
       this.audio.currentTime = 0;
       this.audio.play();
@@ -43,6 +47,7 @@ export default class extends Controller {
 
   handleClick(e) {
     if (e.button == 2) {
+      console.log("preventing default")
       e.preventDefault();
     }
     if (!this.element.contains(e.target)) {
@@ -54,7 +59,6 @@ export default class extends Controller {
 
   stopContextMenu(e) {
     if (this.element.contains(e.target)) {
-      e.preventDefault();
       this.menuTarget.classList.remove("hidden");
       console.log(this.menuTarget);
       let newX = event.clientX - this.element.offsetWidth / 2;
